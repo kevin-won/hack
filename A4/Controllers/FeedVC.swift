@@ -86,7 +86,15 @@ class FeedVC: UIViewController {
 
 // MARK: - UICollectionViewDelegate
 
-extension FeedVC: UICollectionViewDelegate { }
+extension FeedVC: UICollectionViewDelegate { 
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let recipe = recipes[indexPath.row]
+        let viewController2 = DetailedRecipeVC(recipe: recipe)
+        navigationController?.pushViewController(viewController2, animated: true)
+    }
+    
+}
 
 // MARK: - UICollectionViewDataSource
 

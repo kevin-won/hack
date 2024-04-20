@@ -47,7 +47,10 @@ class FeedVC: UIViewController {
 //    }
 
     // MARK: - Set Up Views
-
+    override func viewWillAppear(_ animated: Bool) {
+         super.viewWillAppear(animated)
+         self.collectionView.collectionViewLayout.invalidateLayout()
+     }
     private func setupCollectionView() {
 
         // Set Up CollectionView
@@ -75,11 +78,11 @@ class FeedVC: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 101),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -86),
-        ])
+                    collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+                    collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+                    collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+                    collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -86),
+                ])
     }
 
 }
@@ -93,7 +96,6 @@ extension FeedVC: UICollectionViewDelegate {
         let viewController2 = DetailedRecipeVC(recipe: recipe)
         navigationController?.pushViewController(viewController2, animated: true)
     }
-    
 }
 
 // MARK: - UICollectionViewDataSource

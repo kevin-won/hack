@@ -14,12 +14,12 @@ class FeedVC: UIViewController {
 
     private var collectionViewOne: UICollectionView!
     private var collectionViewTwo: UICollectionView!
-//    private let refreshControl = UIRefreshControl()
 
     // MARK: - Properties (data)
 
     private var filters = [Filter(type: "All", selected: true), Filter(type: "Beginner", selected: false), Filter(type: "Intermediate", selected: false), Filter(type: "Advanced", selected: false)]
-    private var recipes: [Recipe] = Recipe.dummyData
+    private var allRecipes: [Recipe] = []
+    private var recipes: [Recipe] = []
     
     // MARK: - viewDidLoad
 
@@ -33,20 +33,20 @@ class FeedVC: UIViewController {
         setupCollectionView()
     }
     
-//    // MARK: - Networking
-//    
-//    @objc private func fetchPosts() {
-//        NetworkManager.shared.fetchPosts { [weak self] posts in
-//            guard let self = self else { return }
-//            self.posts = posts
-//
-//            // Perform UI update on main queue
-//            DispatchQueue.main.async {
-//                self.collectionView.reloadData()
-//                self.refreshControl.endRefreshing()
-//            }
-//        }
-//    }
+    // MARK: - Networking
+    
+    @objc private func fetchRecipes() {
+        NetworkManager.shared.fetchRecipes { [weak self] recipes in
+            guard let self = self else { return }
+            self.allRecipes = recipes
+            self.recipes = recipes
+
+            // Perform UI update on main queue
+            DispatchQueue.main.async {
+                self.collectionViewTwo.reloadData()
+            }
+        }
+    }
 
     // MARK: - Set Up Views
 
@@ -61,7 +61,6 @@ class FeedVC: UIViewController {
         collectionViewOne.delegate = self
         collectionViewOne.dataSource = self
         
-        
         view.addSubview(collectionViewOne)
         collectionViewOne.translatesAutoresizingMaskIntoConstraints = false
         
@@ -72,7 +71,6 @@ class FeedVC: UIViewController {
             collectionViewOne.heightAnchor.constraint(equalToConstant: 30),
             
         ])
-        
         
         let layoutTwo = UICollectionViewFlowLayout()
         layoutTwo.scrollDirection = .vertical
@@ -88,9 +86,6 @@ class FeedVC: UIViewController {
         
         collectionViewTwo.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
 
-//        refreshControl.addTarget(self, action: #selector(fetchPosts), for: .valueChanged)
-//        collectionView.refreshControl = refreshControl
-        
         view.addSubview(collectionViewTwo)
         collectionViewTwo.translatesAutoresizingMaskIntoConstraints = false
         
@@ -100,8 +95,7 @@ class FeedVC: UIViewController {
             collectionViewTwo.topAnchor.constraint(equalTo: collectionViewOne.bottomAnchor, constant: 32),
             collectionViewTwo.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        
-
+        fetchRecipes()
     }
 
 }
@@ -112,15 +106,13 @@ extension FeedVC: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == collectionViewOne {
-            filters = filters.map { Filter(type: $0.type, selected: false) }
-            filters[indexPath.row].selected = true
+            self.filters = filters.map { Filter(type: $0.type, selected: false) }
+            self.filters[indexPath.row].selected = true
             
             collectionViewOne.reloadData()
-            print("DDDD")
             
             filterRecipes()
         } else {
-            print("AAA")
             let recipe = recipes[indexPath.row]
             let viewController2 = DetailedRecipeVC(recipe: recipe)
             navigationController?.pushViewController(viewController2, animated: true)
@@ -130,12 +122,11 @@ extension FeedVC: UICollectionViewDelegate {
     private func filterRecipes() {
         if let selectedFilter = filters.first(where: { $0.selected }) {
             if selectedFilter.type == "All" {
-                recipes = Recipe.dummyData
+                self.recipes = self.allRecipes
             } else {
-                recipes = Recipe.dummyData.filter { $0.difficulty == selectedFilter.type }
+                self.recipes = self.allRecipes.filter { $0.difficulty == selectedFilter.type }
             }
         }
-
         collectionViewTwo.reloadData()
     }
 }

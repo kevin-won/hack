@@ -24,6 +24,7 @@
 		CD160D4F2BD30F7200964BEF /* DetailedRecipeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD160D4E2BD30F7200964BEF /* DetailedRecipeVC.swift */; };
 		CDBD89992BD3571F00A308C5 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD89982BD3571F00A308C5 /* Filter.swift */; };
 		CDBD899B2BD3578600A308C5 /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD899A2BD3578600A308C5 /* FilterCollectionViewCell.swift */; };
+		CDBD899E2BD449AF00A308C5 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD899D2BD449AF00A308C5 /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		CD160D4E2BD30F7200964BEF /* DetailedRecipeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedRecipeVC.swift; sourceTree = "<group>"; };
 		CDBD89982BD3571F00A308C5 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		CDBD899A2BD3578600A308C5 /* FilterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewCell.swift; sourceTree = "<group>"; };
+		CDBD899D2BD449AF00A308C5 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 		2ED700562AF1CF5600B7C687 /* A4 */ = {
 			isa = PBXGroup;
 			children = (
+				CDBD899C2BD4499E00A308C5 /* Networking */,
 				CD160D422BD2ED5600964BEF /* Controllers */,
 				2E07F6132AF1D04700395214 /* Extensions */,
 				CD160D492BD2F00C00964BEF /* Models */,
@@ -126,6 +129,14 @@
 				CDBD89982BD3571F00A308C5 /* Filter.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		CDBD899C2BD4499E00A308C5 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				CDBD899D2BD449AF00A308C5 /* NetworkManager.swift */,
+			);
+			path = Networking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -209,6 +220,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDBD899E2BD449AF00A308C5 /* NetworkManager.swift in Sources */,
 				CD160D4D2BD2F10E00964BEF /* RecipeCollectionViewCell.swift in Sources */,
 				CDBD89992BD3571F00A308C5 /* Filter.swift in Sources */,
 				CD160D442BD2ED7900964BEF /* FeedVC.swift in Sources */,

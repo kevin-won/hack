@@ -22,6 +22,8 @@
 		CD160D4B2BD2F01700964BEF /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD160D4A2BD2F01700964BEF /* Recipe.swift */; };
 		CD160D4D2BD2F10E00964BEF /* RecipeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD160D4C2BD2F10E00964BEF /* RecipeCollectionViewCell.swift */; };
 		CD160D4F2BD30F7200964BEF /* DetailedRecipeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD160D4E2BD30F7200964BEF /* DetailedRecipeVC.swift */; };
+		CDBD89992BD3571F00A308C5 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD89982BD3571F00A308C5 /* Filter.swift */; };
+		CDBD899B2BD3578600A308C5 /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD899A2BD3578600A308C5 /* FilterCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,8 @@
 		CD160D4A2BD2F01700964BEF /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		CD160D4C2BD2F10E00964BEF /* RecipeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCollectionViewCell.swift; sourceTree = "<group>"; };
 		CD160D4E2BD30F7200964BEF /* DetailedRecipeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedRecipeVC.swift; sourceTree = "<group>"; };
+		CDBD89982BD3571F00A308C5 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		CDBD899A2BD3578600A308C5 /* FilterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				CD160D4C2BD2F10E00964BEF /* RecipeCollectionViewCell.swift */,
+				CDBD899A2BD3578600A308C5 /* FilterCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -118,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				CD160D4A2BD2F01700964BEF /* Recipe.swift */,
+				CDBD89982BD3571F00A308C5 /* Filter.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -204,8 +210,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD160D4D2BD2F10E00964BEF /* RecipeCollectionViewCell.swift in Sources */,
+				CDBD89992BD3571F00A308C5 /* Filter.swift in Sources */,
 				CD160D442BD2ED7900964BEF /* FeedVC.swift in Sources */,
 				2E07F6192AF1D09200395214 /* ViewController.swift in Sources */,
+				CDBD899B2BD3578600A308C5 /* FilterCollectionViewCell.swift in Sources */,
 				CD160D4F2BD30F7200964BEF /* DetailedRecipeVC.swift in Sources */,
 				2E07F6152AF1D05700395214 /* UIFont+Extension.swift in Sources */,
 				2ED700582AF1CF5600B7C687 /* AppDelegate.swift in Sources */,

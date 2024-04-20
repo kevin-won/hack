@@ -9,4 +9,5 @@ import Foundation
 
 struct Filter: Codable {
     let type: String
+    var selected: Bool
 }

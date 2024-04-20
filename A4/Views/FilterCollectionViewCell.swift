@@ -13,6 +13,7 @@ class FilterCollectionViewCell: UICollectionViewCell {
     
     private let filterButton = UIButton()
     private var filterType: String = ""
+    private var filterSelected = false
      
     static let reuse = "FilterCollectionViewCellReuse"
     
@@ -21,6 +22,7 @@ class FilterCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupFilterButton()
+        filterButton.isUserInteractionEnabled = false 
     }
     
     required init?(coder: NSCoder) {
@@ -29,20 +31,28 @@ class FilterCollectionViewCell: UICollectionViewCell {
     
     // MARK: - configure
     
-    func configure(filterType: String) {
-        self.filterType = filterType
-        filterButton.setTitle(filterType, for: .normal)
+    func configure(filter: Filter) {
+        self.filterType = filter.type
+        if filter.selected {
+            self.filterSelected = true
+            filterButton.setTitleColor(.white, for: .normal)
+            filterButton.backgroundColor = UIColor(red: 0xFF / 255.0, green: 0xAA / 255.0, blue: 0x33 / 255.0, alpha: 1.0)
+            
+        } else {
+            filterButton.setTitleColor(.black, for: .normal)
+            filterButton.backgroundColor = UIColor(red: 0xF0 / 255.0, green: 0xF0 / 255.0, blue: 0xF0 / 255.0, alpha: 1.0)
+        }
+        
+        
+        filterButton.setTitle(self.filterType, for: .normal)
     }
     
     private func setupFilterButton() {
-        
-        filterButton.setTitleColor(.white, for: .normal)
-        filterButton.backgroundColor = UIColor(red: 0xFF / 255.0, green: 0xAA / 255.0, blue: 0x33 / 255.0, alpha: 1.0)
+    
         filterButton.layer.cornerRadius = 16
 
         contentView.addSubview(filterButton)
         filterButton.translatesAutoresizingMaskIntoConstraints = false
-//        filterButton.addTarget(self, action: #selector(pushVC), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             filterButton.topAnchor.constraint(equalTo: contentView.topAnchor),

@@ -18,7 +18,7 @@ class FeedVC: UIViewController {
 
     // MARK: - Properties (data)
 
-    private var filterTypes = ["All", "Beginner", "Intermediate", "Advanced"]
+    private var filters = [Filter(type: "All", selected: true), Filter(type: "Beginner", selected: false), Filter(type: "Intermediate", selected: false), Filter(type: "Advanced", selected: false)]
     private var recipes: [Recipe] = Recipe.dummyData
     
     // MARK: - viewDidLoad
@@ -61,6 +61,7 @@ class FeedVC: UIViewController {
         collectionViewOne.delegate = self
         collectionViewOne.dataSource = self
         
+        
         view.addSubview(collectionViewOne)
         collectionViewOne.translatesAutoresizingMaskIntoConstraints = false
         
@@ -71,6 +72,7 @@ class FeedVC: UIViewController {
             collectionViewOne.heightAnchor.constraint(equalToConstant: 30),
             
         ])
+        
         
         let layoutTwo = UICollectionViewFlowLayout()
         layoutTwo.scrollDirection = .vertical
@@ -106,17 +108,35 @@ class FeedVC: UIViewController {
 
 // MARK: - UICollectionViewDelegate
 
-extension FeedVC: UICollectionViewDelegate { 
+extension FeedVC: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == collectionViewOne {
-            let filter = filterTypes[indexPath.row]
+            filters = filters.map { Filter(type: $0.type, selected: false) }
+            filters[indexPath.row].selected = true
             
+            collectionViewOne.reloadData()
+            print("DDDD")
+            
+            filterRecipes()
         } else {
+            print("AAA")
             let recipe = recipes[indexPath.row]
             let viewController2 = DetailedRecipeVC(recipe: recipe)
             navigationController?.pushViewController(viewController2, animated: true)
         }
+    }
+    
+    private func filterRecipes() {
+        if let selectedFilter = filters.first(where: { $0.selected }) {
+            if selectedFilter.type == "All" {
+                recipes = Recipe.dummyData
+            } else {
+                recipes = Recipe.dummyData.filter { $0.difficulty == selectedFilter.type }
+            }
+        }
+
+        collectionViewTwo.reloadData()
     }
 }
 
@@ -128,7 +148,7 @@ extension FeedVC: UICollectionViewDataSource {
         // Return the cells for each section
         if collectionView == collectionViewOne {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilterCollectionViewCell.reuse, for: indexPath) as? FilterCollectionViewCell else { return UICollectionViewCell() }
-            cell.configure(filterType: filterTypes[indexPath.row])
+            cell.configure(filter: filters[indexPath.row])
             return cell
         }
         else {

@@ -114,7 +114,7 @@ extension FeedVC: UICollectionViewDelegate {
             filterRecipes()
         } else {
             let recipe = recipes[indexPath.row]
-            let viewController2 = DetailedRecipeVC(recipe: recipe)
+            let viewController2 = DetailedRecipeVC(recipe: recipe, collectionViewTwoDelegate: self)
             navigationController?.pushViewController(viewController2, animated: true)
         }
     }
@@ -169,8 +169,20 @@ extension FeedVC: UICollectionViewDelegateFlowLayout {
         if collectionView == collectionViewOne {
             return CGSize(width: 116, height: 32)
         } else {
-            return CGSize(width: 148, height: 212)
+            return CGSize(width: 148, height: 216)
         }
     }
 
+}
+
+extension FeedVC: CollectionViewTwoDelegate {
+
+    func update() {
+        collectionViewTwo.reloadData()
+    }
+    
+}
+
+protocol CollectionViewTwoDelegate: AnyObject {
+    func update()
 }

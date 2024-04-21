@@ -13,6 +13,9 @@ class DetailedRecipeVC: UIViewController {
     private let recipeImage = UIImageView()
     private let recipeLabel = UILabel()
     private let descriptionLabel = UILabel()
+    private var bookmarkBarButtonItem = UIBarButtonItem()
+    private let recipeID: String
+    private let collectionViewTwoDelegate: CollectionViewTwoDelegate?
     
     // MARK: - viewDidLoad and init
     
@@ -23,12 +26,15 @@ class DetailedRecipeVC: UIViewController {
         setupRecipeImage()
         setupRecipeLabel()
         setupDescriptionLabel()
+        setupBookmarkBarButtonItem()
     }
     
-    init(recipe: Recipe) {
-        recipeImage.sd_setImage(with: URL(string: recipe.imageUrl))
-        recipeLabel.text = recipe.name
-        descriptionLabel.text = recipe.description
+    init(recipe: Recipe, collectionViewTwoDelegate: CollectionViewTwoDelegate) {
+        self.recipeImage.sd_setImage(with: URL(string: recipe.imageUrl))
+        self.recipeLabel.text = recipe.name
+        self.descriptionLabel.text = recipe.description
+        self.recipeID = recipe.id
+        self.collectionViewTwoDelegate = collectionViewTwoDelegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -85,6 +91,39 @@ class DetailedRecipeVC: UIViewController {
             descriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 32),
             descriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -32),
         ])
+    }
+    
+    private func setupBookmarkBarButtonItem() {
+        // Check UserDefaults
+        let bookmarked = UserDefaults.standard.array(forKey: "bookmarked") as? [String] ?? []
+        if bookmarked.contains(recipeID) {
+            self.bookmarkBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bookmark.fill"), style: .plain, target: self, action: #selector(didTapBarButton))
+            
+        } else {
+            self.bookmarkBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bookmark"), style: .plain, target: self, action: #selector(didTapBarButton))
+        }
+        bookmarkBarButtonItem.tintColor = UIColor(red: 0xFF / 255.0, green: 0xAA / 255.0, blue: 0x33 / 255.0, alpha: 1.0)
+
+        navigationItem.rightBarButtonItem = bookmarkBarButtonItem
+    }
+    
+    @objc func didTapBarButton() {
+
+            var bookmarked = UserDefaults.standard.array(forKey: "bookmarked") as? [String] ?? []
+
+            if bookmarked.contains(self.recipeID) {
+                bookmarked.removeAll { $0 == self.recipeID }
+                self.bookmarkBarButtonItem.image = UIImage(systemName: "bookmark")
+            } else {
+                bookmarked.append(self.recipeID)
+                self.bookmarkBarButtonItem.image = UIImage(systemName: "bookmark.fill")
+            }
+            bookmarkBarButtonItem.tintColor = UIColor(red: 0xFF / 255.0, green: 0xAA / 255.0, blue: 0x33 / 255.0, alpha: 1.0)
+
+            UserDefaults.standard.set(bookmarked, forKey: "bookmarked")
+            
+            self.collectionViewTwoDelegate?.update()
+        
     }
 }
 

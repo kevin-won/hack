@@ -15,6 +15,7 @@ class RecipeCollectionViewCell: UICollectionViewCell {
     private let recipeImage = UIImageView()
     private let recipeLabel = UILabel()
     private let ratingAndDifficultyLabel = UILabel()
+    private let bookmarkImage = UIImageView()
      
     static let reuse = "RecipeCollectionViewCellReuse"
     
@@ -28,6 +29,7 @@ class RecipeCollectionViewCell: UICollectionViewCell {
         setupRecipeImage()
         setupRecipeLabel()
         setupRatingAndDifficultyLabel()
+        setupBookmarkImage()
     }
     
     required init?(coder: NSCoder) {
@@ -40,6 +42,16 @@ class RecipeCollectionViewCell: UICollectionViewCell {
         recipeImage.sd_setImage(with: URL(string: recipe.imageUrl))
         recipeLabel.text = recipe.name
         ratingAndDifficultyLabel.text = String(recipe.rating) + " - " + recipe.difficulty
+        
+        // Check UserDefaults
+        let bookmarked = UserDefaults.standard.array(forKey: "bookmarked") as? [String] ?? []
+        if bookmarked.contains(recipe.id) {
+            bookmarkImage.image = UIImage(systemName: "bookmark.fill")
+            bookmarkImage.tintColor = UIColor(red: 0xFF / 255.0, green: 0xAA / 255.0, blue: 0x33 / 255.0, alpha: 1.0)
+            print("HHH")
+        } else {
+            bookmarkImage.image = UIImage(systemName: "bookmark.empty")
+        }
     }
     
     private func setupRecipeImage() {
@@ -63,16 +75,27 @@ class RecipeCollectionViewCell: UICollectionViewCell {
     private func setupRecipeLabel() {
         recipeLabel.textColor = .label
         recipeLabel.font = .systemFont(ofSize: 16, weight: .semibold).rounded
-        recipeLabel.numberOfLines = 2
+        recipeLabel.numberOfLines = 3
 
-        
         contentView.addSubview(recipeLabel)
         recipeLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+                
         NSLayoutConstraint.activate([
             recipeLabel.topAnchor.constraint(equalTo: recipeImage.bottomAnchor, constant: 8),
             recipeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
-            recipeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
+            recipeLabel.widthAnchor.constraint(equalToConstant: 128)
+        ])
+    }
+    
+    private func setupBookmarkImage() {
+        contentView.addSubview(bookmarkImage)
+        bookmarkImage.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            bookmarkImage.topAnchor.constraint(equalTo: recipeImage.bottomAnchor, constant: 8),
+            bookmarkImage.leadingAnchor.constraint(equalTo: recipeLabel.trailingAnchor, constant: 0),
+            bookmarkImage.heightAnchor.constraint(equalToConstant: 20),
+            bookmarkImage.widthAnchor.constraint(equalToConstant: 20)
         ])
     }
     

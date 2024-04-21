@@ -48,7 +48,6 @@ class RecipeCollectionViewCell: UICollectionViewCell {
         if bookmarked.contains(recipe.id) {
             bookmarkImage.image = UIImage(systemName: "bookmark.fill")
             bookmarkImage.tintColor = UIColor(red: 0xFF / 255.0, green: 0xAA / 255.0, blue: 0x33 / 255.0, alpha: 1.0)
-            print("HHH")
         } else {
             bookmarkImage.image = UIImage(systemName: "bookmark.empty")
         }

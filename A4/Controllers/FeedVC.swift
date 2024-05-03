@@ -2,132 +2,75 @@
 //  FeedVC.swift
 //  A4
 //
-//  Created by Kevin Won on 4/19/24.
+//  Created by Vin Bui on 10/31/23.
 //
 
 import UIKit
-import Alamofire
 
 class FeedVC: UIViewController {
 
     // MARK: - Properties (view)
 
-    private var collectionViewOne: UICollectionView!
-    private var collectionViewTwo: UICollectionView!
-
+    private var collectionView: UICollectionView!
+    
     // MARK: - Properties (data)
 
-    private var filters = [Filter(type: "All", selected: true), Filter(type: "Beginner", selected: false), Filter(type: "Intermediate", selected: false), Filter(type: "Advanced", selected: false)]
-    private var allRecipes: [Recipe] = []
-    private var recipes: [Recipe] = []
+    private var tasks: [Task] = []
     
     // MARK: - viewDidLoad
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "ChefOS"
+        title = "To-Do List"
         navigationController?.navigationBar.prefersLargeTitles = true
-        view.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        view.backgroundColor = UIColor.white
 
         setupCollectionView()
     }
     
-    // MARK: - Networking
-    
-    @objc private func fetchRecipes() {
-        NetworkManager.shared.fetchRecipes { [weak self] recipes in
-            guard let self = self else { return }
-            self.allRecipes = recipes
-            self.recipes = recipes
-
-            // Perform UI update on main queue
-            DispatchQueue.main.async {
-                self.collectionViewTwo.reloadData()
-            }
-        }
-    }
+     override func viewWillAppear(_ animated: Bool) {
+         super.viewWillAppear(animated)
+         tasks = Task.dummyData
+         collectionView.reloadData()
+     }
 
     // MARK: - Set Up Views
 
     private func setupCollectionView() {
-        // Set Up CollectionView
-        let layoutOne = UICollectionViewFlowLayout()
-        layoutOne.scrollDirection = .horizontal
-        layoutOne.minimumInteritemSpacing = 12
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 16
+        layout.minimumInteritemSpacing = 16
         
-        collectionViewOne = UICollectionView(frame: .zero, collectionViewLayout: layoutOne)
-        collectionViewOne.register(FilterCollectionViewCell.self, forCellWithReuseIdentifier: FilterCollectionViewCell.reuse)
-        collectionViewOne.delegate = self
-        collectionViewOne.dataSource = self
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.register(CreateTaskCollectionViewCell.self, forCellWithReuseIdentifier: CreateTaskCollectionViewCell.reuse)
+        collectionView.register(TaskCollectionViewCell.self, forCellWithReuseIdentifier: TaskCollectionViewCell.reuse)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.backgroundColor = UIColor.white
         
-        view.addSubview(collectionViewOne)
-        collectionViewOne.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            collectionViewOne.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            collectionViewOne.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionViewOne.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
-            collectionViewOne.heightAnchor.constraint(equalToConstant: 30),
-            
-        ])
-        
-        let layoutTwo = UICollectionViewFlowLayout()
-        layoutTwo.scrollDirection = .vertical
-        layoutTwo.minimumLineSpacing = 24
-        layoutTwo.minimumInteritemSpacing = 33
-        
-        // Initialize CollectionView with the layout
-        collectionViewTwo = UICollectionView(frame: .zero, collectionViewLayout: layoutTwo)
-        collectionViewTwo.register(RecipeCollectionViewCell.self, forCellWithReuseIdentifier: RecipeCollectionViewCell.reuse)
-        collectionViewTwo.delegate = self
-        collectionViewTwo.dataSource = self
-        collectionViewTwo.alwaysBounceVertical = true
-        
-        collectionViewTwo.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-
-        view.addSubview(collectionViewTwo)
-        collectionViewTwo.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            collectionViewTwo.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            collectionViewTwo.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
-            collectionViewTwo.topAnchor.constraint(equalTo: collectionViewOne.bottomAnchor, constant: 32),
-            collectionViewTwo.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        fetchRecipes()
     }
-
 }
 
 // MARK: - UICollectionViewDelegate
 
 extension FeedVC: UICollectionViewDelegate {
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == collectionViewOne {
-            self.filters = filters.map { Filter(type: $0.type, selected: false) }
-            self.filters[indexPath.row].selected = true
-            
-            collectionViewOne.reloadData()
-            
-            filterRecipes()
-        } else {
-            let recipe = recipes[indexPath.row]
-            let viewController2 = DetailedRecipeVC(recipe: recipe, collectionViewTwoDelegate: self)
+        if indexPath.section == 1 {
+            let task = tasks[indexPath.row]
+            let viewController2 = DetailedTaskVC(task: task)
             navigationController?.pushViewController(viewController2, animated: true)
         }
-    }
-    
-    private func filterRecipes() {
-        if let selectedFilter = filters.first(where: { $0.selected }) {
-            if selectedFilter.type == "All" {
-                self.recipes = self.allRecipes
-            } else {
-                self.recipes = self.allRecipes.filter { $0.difficulty == selectedFilter.type }
-            }
-        }
-        collectionViewTwo.reloadData()
     }
 }
 
@@ -136,28 +79,36 @@ extension FeedVC: UICollectionViewDelegate {
 extension FeedVC: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        // Return the cells for each section
-        if collectionView == collectionViewOne {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilterCollectionViewCell.reuse, for: indexPath) as? FilterCollectionViewCell else { return UICollectionViewCell() }
-            cell.configure(filter: filters[indexPath.row])
+        if indexPath.section == 0 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CreateTaskCollectionViewCell.reuse, for: indexPath) as? CreateTaskCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            cell.delegate = self 
+            return cell
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TaskCollectionViewCell.reuse, for: indexPath) as? TaskCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            cell.configure(task: tasks[indexPath.row])
             return cell
         }
-        else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeCollectionViewCell.reuse, for: indexPath) as? RecipeCollectionViewCell else { return UICollectionViewCell() }
-                cell.configure(recipe: recipes[indexPath.row])
-                return cell
-        }
     }
-
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == collectionViewOne {
-            return 4
+        if section == 0 {
+            return 1
         } else {
-            return recipes.count
+            return tasks.count
         }
     }
 
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 24, left: 0, bottom: 8, right: 0)
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -165,24 +116,14 @@ extension FeedVC: UICollectionViewDataSource {
 extension FeedVC: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        // Return the size for each cell per section
-        if collectionView == collectionViewOne {
-            return CGSize(width: 116, height: 32)
-        } else {
-            return CGSize(width: 148, height: 216)
-        }
+        let width = collectionView.frame.width - 32
+        return CGSize(width: width, height: indexPath.section == 0 ? 175 : 50)
     }
-
 }
 
-extension FeedVC: CollectionViewTwoDelegate {
-
-    func update() {
-        collectionViewTwo.reloadData()
+extension FeedVC: CreateTaskDelegate {
+    func didAddTask() {
+        tasks = Task.dummyData
+        collectionView.reloadData()
     }
-    
-}
-
-protocol CollectionViewTwoDelegate: AnyObject {
-    func update()
 }

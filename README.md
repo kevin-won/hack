@@ -2,7 +2,7 @@
 
 App Name: To Do-ie
 App Tagline: Get Your Work Done!
-Backend Repo: 
+Backend Repo: https://github.com/samparkk13/hack-challenge
 Screenshots
 Description: You can add tasks, and scroll through your tasks, and click on tasks to display a detailed view, and you can remove tasks too!
 List of how addressing requirements:
